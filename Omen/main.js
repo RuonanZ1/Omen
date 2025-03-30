@@ -29,12 +29,7 @@ const noTexts = [
 // 字体样式库
 const fontStyles = ["normal", "italic", "oblique", "small-caps"];
 
-// 图片库 - 使用 CDN 加速
-const imgUrls = [
-  `${CDN_PREFIX}/imgs/ku.jpg`,
-  `${CDN_PREFIX}/imgs/motou.jpg`,
-  // ...其他图片路径
-];
+
 // 图片库
 const imgUrls = [
   `${CDN_PREFIX}/imgs/ku.jpg`,
