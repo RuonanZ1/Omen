@@ -3,6 +3,12 @@ const noBtn = document.querySelector(".no-btn");
 const omenImg = document.getElementById("omen-img");
 const app = document.getElementById("app");
 
+// 常量定义
+const MAX_CLICKS_BEFORE_HIDE = 10;
+const MAX_YES_BTN_SCALE = 3.5;
+const MIN_NO_BTN_SCALE = 0.5;
+const SCALE_STEP = 0.1;
+
 // 文字选项库
 const noTexts = [
   "不给",
@@ -20,7 +26,7 @@ const noTexts = [
 // 字体样式库
 const fontStyles = ["normal", "italic", "oblique", "small-caps"];
 
-// 图片库（替换为你自己的图片URL）
+// 图片库
 const imgUrls = [
   "./imgs/ku.jpg",
   "./imgs/motou.jpg",
@@ -34,51 +40,77 @@ const imgUrls = [
   "./imgs/ku.jpg",
 ];
 
+// 状态变量
 let clickCount = 0;
-let currentSize = 1;
-let noBtnSize = 1;
-let debounceTimer;
+let yesBtnScale = 1;
+let noBtnScale = 1;
 
-// 防抖函数
+// 防抖函数改进版
 function debounce(func, delay) {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(func, delay);
+  let timer;
+  return function() {
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(this, arguments), delay);
+  };
 }
 
-noBtn.addEventListener("click", () => {
-  debounce(() => {
-    // 1. 改变"不给"按钮文字（循环使用）
-    const textIndex = clickCount % noTexts.length;
-    noBtn.textContent = noTexts[textIndex];
+// 处理"不给"按钮点击
+function handleNoBtnClick() {
+  // 1. 改变按钮文字
+  noBtn.textContent = noTexts[clickCount % noTexts.length];
+  
+  // 2. 改变字体样式
+  noBtn.style.fontStyle = fontStyles[clickCount % fontStyles.length];
+  
+  // 3. 缩小"不给"按钮
+  noBtnScale = Math.max(MIN_NO_BTN_SCALE, noBtnScale - SCALE_STEP);
+  noBtn.style.transform = `scale(${noBtnScale})`;
+  
+  // 4. 放大"给你"按钮
+  yesBtnScale = Math.min(MAX_YES_BTN_SCALE, yesBtnScale + SCALE_STEP);
+  yesBtn.style.transform = `scale(${yesBtnScale})`;
+  
+  // 5. 更换图片
+  omenImg.src = imgUrls[clickCount % imgUrls.length];
+  
+  // 6. 增加计数
+  clickCount++;
+  
+  // 7. 达到阈值后隐藏按钮
+  if (clickCount >= MAX_CLICKS_BEFORE_HIDE) {
+    noBtn.style.display = "none";
+    // 可以添加消失动画
+    noBtn.style.transition = "opacity 0.5s";
+    noBtn.style.opacity = "0";
+    setTimeout(() => noBtn.style.display = "none", 500);
+  }
+}
 
-    // 2. 改变"不给"按钮样式
-    noBtn.style.fontStyle = fontStyles[clickCount % fontStyles.length];
-
-    // 3. "不给"按钮变小
-    noBtnSize = Math.max(0.5, noBtnSize - 0.05);
-    noBtn.style.transform = `scale(${noBtnSize})`;
-
-    // 4. "给你"按钮变大（最大放大到1.5倍）
-    currentSize = Math.min(3.5, currentSize + 0.1);
-    yesBtn.style.transform = `scale(${currentSize})`;
-
-    // 5. 改变图片（循环使用）
-    const imgIndex = clickCount % imgUrls.length;
-    omenImg.src = imgUrls[imgIndex];
-
-    // 6. 增加计数
-    clickCount++;
-    // 7. 达到一定次数后，隐藏"不给"按钮
-    if (clickCount >= 11) {
-      noBtn.style.display = "none"; // 隐藏"不给"按钮
-    }
-  }, 200);
-});
-
-yesBtn.addEventListener("click", () => {
-  omenImg.src = imgUrls[9];
-  // 显示感谢信息
-  const originalText = yesBtn.textContent;
+// 处理"给你"按钮点击
+function handleYesBtnClick() {
+  // 使用最后一张图片作为感谢图
+  omenImg.src = imgUrls[imgUrls.length - 1];
+  
+  // 改变按钮文本和样式
   yesBtn.textContent = "谢谢老板！";
-  noBtn.style.display = "none"; // 隐藏"不给"按钮
-});
+  yesBtn.style.backgroundColor = "#4CAF50";
+  yesBtn.style.color = "white";
+  
+  // 隐藏"不给"按钮
+  noBtn.style.display = "none";
+  
+  // 可以添加一些庆祝效果
+  app.style.backgroundColor = "#f0f8ff";
+  confettiEffect();
+}
+
+// 添加简单的庆祝效果
+function confettiEffect() {
+  // 这里可以添加实际的confetti库调用
+  console.log("显示庆祝效果!");
+  // 实际项目中可以使用confetti.js等库
+}
+
+// 事件监听（使用改进后的防抖）
+noBtn.addEventListener("click", debounce(handleNoBtnClick, 200));
+yesBtn.addEventListener("click", handleYesBtnClick);
