@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Omen</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="app">
-      <div id="img-container">
-        <img id="omen-img" src="./imgs/motou.jpg" alt="幽影" />
-      </div>
-      <h2>可以给我多点资金吗？</h2>
-      <div class="buttons">
-        <button class="yes-btn">给你</button>
-        <button class="no-btn">不给</button>
-      </div>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omen</title>
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="main.js" as="script">
+  <link rel="stylesheet" href="style.css" />
+  <!-- 预加载第一张图片 -->
+  <link rel="preload" href="./imgs/motou.jpg" as="image">
+</head>
+<body>
+  <div id="app">
+    <div id="img-container">
+      <!-- 添加 lazy loading 和 width/height 防止布局偏移 -->
+      <img 
+        id="omen-img" 
+        src="./imgs/motou.jpg" 
+        alt="幽影" 
+        loading="lazy"
+        width="400"
+        height="300"
+      >
     </div>
-    <script src="mian.js" type="module"></script>
-  </body>
+    <h2>可以给我多点资金吗？</h2>
+    <div class="buttons">
+      <button class="yes-btn">给你</button>
+      <button class="no-btn">不给</button>
+    </div>
+  </div>
+  
+  <!-- 使用 defer 加载脚本 -->
+  <script src="main.js" defer></script>
+  
+  <!-- 添加 confetti 库 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</body>
 </html>
