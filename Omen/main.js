@@ -1,3 +1,6 @@
+// 使用 jsDelivr CDN 加速图片
+const CDN_PREFIX = 'https://cdn.jsdelivr.net/gh/likeasunflower/Omen@main';
+
 const yesBtn = document.querySelector(".yes-btn");
 const noBtn = document.querySelector(".no-btn");
 const omenImg = document.getElementById("omen-img");
@@ -26,20 +29,33 @@ const noTexts = [
 // 字体样式库
 const fontStyles = ["normal", "italic", "oblique", "small-caps"];
 
+// 图片库 - 使用 CDN 加速
+const imgUrls = [
+  `${CDN_PREFIX}/imgs/ku.jpg`,
+  `${CDN_PREFIX}/imgs/motou.jpg`,
+  // ...其他图片路径
+];
 // 图片库
 const imgUrls = [
-  "./imgs/ku.jpg",
-  "./imgs/motou.jpg",
-  "./imgs/mao.jpg",
-  "./imgs/za.jpg",
-  "./imgs/dance.jpg",
-  "./imgs/ku.jpg",
-  "./imgs/motou.jpg",
-  "./imgs/za.jpg",
-  "./imgs/mao.jpg",
-  "./imgs/ku.jpg",
+  `${CDN_PREFIX}/imgs/ku.jpg`,
+  `${CDN_PREFIX}/imgs/motou.jpg`,
+  `${CDN_PREFIX}/imgs/mao.jpg`,
+  `${CDN_PREFIX}/imgs/za.jpg`,
+  `${CDN_PREFIX}/imgs/dance.jpg`,
+  `${CDN_PREFIX}/imgs/ku.jpg`,
+  `${CDN_PREFIX}/imgs/motou.jpg`,
+  `${CDN_PREFIX}/imgs/za.jpg`,
+  `${CDN_PREFIX}/imgs/mao.jpg`,
+  `${CDN_PREFIX}/imgs/ku.jpg`,
 ];
-
+function confettiEffect() {
+  // 实际调用 confetti 效果
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+}
 // 状态变量
 let clickCount = 0;
 let yesBtnScale = 1;
